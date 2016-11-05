@@ -39,8 +39,41 @@ function Calculator(userInput) {
 }
 
 Calculator.prototype.resolveExpression = function(expression) {
-
+  var operatorPairs = [['*', '/'], ['+', '-']];
+  for (var i = 0; i < operatorPairs.length; i++) {
+    while (expression.indexOf(operatorPairs[i][0]) > -1 || expression.indexOf(operatorPairs[i][1]) > -1) {
+      var operator = this.assignOrderOperations(expression, operatorPairs[i]);
+      console.log(operator);
+      var inputs = this.splitExpression(expression, operator);
+      var resolvedVal = this.doMath(inputs.leftOperand, inputs.rightOperand, operator);
+      inputs.leftExp.push(resolvedVal);
+      console.log('NEW LEFT:', inputs.leftExp);
+      expression = inputs.leftExp.concat(inputs.rightExp);
+    }
+  }
+  console.log('FINAL OUTPUT', expression[0]);
+  return expression[0];
 }
+
+Calculator.prototype.splitExpression = function(expression, operator) {
+  var splitLocation = expression.indexOf(operator);
+  var leftExp = expression.slice(0, splitLocation);
+  var rightExp = expression.slice(splitLocation+1);
+  var leftOperand = +leftExp.pop();
+  var rightOperand = +rightExp.shift();
+  if (isNaN(leftOperand) || isNaN(rightOperand)) {
+    console.log('Bad Inputs');
+    return null;
+  }
+  console.log(leftExp, rightExp, leftOperand, rightOperand, operator);
+  return {
+    leftExp : leftExp,
+    rightExp : rightExp,
+    leftOperand : leftOperand,
+    rightOperand : rightOperand
+  }
+}
+
 
 Calculator.prototype.assignOrderOperations = function(expression, operatorPair) {
   var operator;
@@ -80,19 +113,24 @@ Calculator.prototype.doMath = function(num1, num2, operator) {
 }
 
 var test = new Calculator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
+test.resolveExpression(test.expressionArray);
 
-console.log(test.doMath(2, 3, '*'));
-console.log(test.doMath(2, 3, '/'));
-console.log(test.doMath(2, 3, '+'));
-console.log(test.doMath(2, 3, '-'));
-console.log(test.doMath(2, 0, '/'));
-console.log(test.assignOrderOperations('1+3/2*4', ['*', '/']));
+// console.log(test.doMath(2, 3, '*'));
+// console.log(test.doMath(2, 3, '/'));
+// console.log(test.doMath(2, 3, '+'));
+// console.log(test.doMath(2, 3, '-'));
+// console.log(test.doMath(2, 0, '/'));
+// console.log(test.assignOrderOperations('1+3/2*4', ['*', '/']));
+//
+// var test2 = new Calculator('1+2*3/2*4');
+// console.log(test2.assignOrderOperations(test2.expressionArray, ['*', '/']));
+//
+// var test3 = new Calculator('1+3/2*4');
+// console.log(test3.assignOrderOperations(test3.expressionArray, ['*', '/']));
+//
+// var test4 = new Calculator('1+3/4');
+// console.log(test4.assignOrderOperations(test4.expressionArray, ['*', '/']));
+// test4.resolveExpression(test4.expressionArray, '*');
 
-var test2 = new Calculator('1+2*3/2*4');
-console.log(test2.assignOrderOperations(test2.expressionArray, ['*', '/']));
-
-var test3 = new Calculator('1+3/2*4');
-console.log(test3.assignOrderOperations(test3.expressionArray, ['*', '/']));
-
-var test4 = new Calculator('1+3/4');
-console.log(test4.assignOrderOperations(test4.expressionArray, ['*', '/']));
+// var test5 = new Calculator('1+3/2*4');
+// test5.resolveExpression(test5.expressionArray);
