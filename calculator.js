@@ -33,6 +33,7 @@ doMath(num1, num2, operator)
   actually carry out the mathematical operation
 */
 
+// Evaluator provides an interface for users to simply input an expression and get the result back.
 function Evaluator(input) {
   var toEvaluate = new Calculator(input);
   var result = toEvaluate.resolveExpression(toEvaluate.expressionArray);
