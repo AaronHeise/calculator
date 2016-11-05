@@ -43,7 +43,19 @@ Calculator.prototype.resolveExpression = function(expression) {
 }
 
 Calculator.prototype.assignOrderOperations = function(expression, operatorPair) {
-
+  var operator;
+  if (expression.indexOf(operatorPair[0]) === -1) {
+    operator = operatorPair[1];
+  }
+  else if (expression.indexOf(operatorPair[1]) === -1) {
+    operator = operatorPair[0];
+  }
+  else if (expression.indexOf(operatorPair[0]) < expression.indexOf(operatorPair[1])) {
+    operator = operatorPair[0];
+  } else {
+    operator = operatorPair[1];
+  }
+  return operator;
 }
 
 Calculator.prototype.doMath = function(num1, num2, operator) {
@@ -74,3 +86,13 @@ console.log(test.doMath(2, 3, '/'));
 console.log(test.doMath(2, 3, '+'));
 console.log(test.doMath(2, 3, '-'));
 console.log(test.doMath(2, 0, '/'));
+console.log(test.assignOrderOperations('1+3/2*4', ['*', '/']));
+
+var test2 = new Calculator('1+2*3/2*4');
+console.log(test2.assignOrderOperations(test2.expressionArray, ['*', '/']));
+
+var test3 = new Calculator('1+3/2*4');
+console.log(test3.assignOrderOperations(test3.expressionArray, ['*', '/']));
+
+var test4 = new Calculator('1+3/4');
+console.log(test4.assignOrderOperations(test4.expressionArray, ['*', '/']));
