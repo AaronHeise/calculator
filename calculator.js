@@ -138,5 +138,7 @@ Calculator.prototype.resolveExpression = function(expression) {
 
 // var test5 = new Calculator('1+3/2*4');
 // test5.resolveExpression(test5.expressionArray);
-Evaluator('2 * 2 + 6 / 2 * 15 / 8 * 3 - 11');
-Evaluator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
+
+// Final tests
+// Evaluator('2 * 2 + 6 / 2 * 15 / 8 * 3 - 11');
+// Evaluator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
