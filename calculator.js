@@ -26,54 +26,25 @@ assignOrderOperations(expression, operatorPair)
   determine if only one of the operators is present, if so, select other one;
   if both present, assign operator as first one in expression
 
-doMath
+splitExpression(expression, operator)
+  given the highest priority operator, break apart the expression to be reduced w/ the operator
 
+doMath(num1, num2, operator)
+  actually carry out the mathematical operation
 */
 
+function Evaluator(input) {
+  var toEvaluate = new Calculator(input);
+  var result = toEvaluate.resolveExpression(toEvaluate.expressionArray);
+  console.log(result);
+  return result;
+}
 
 function Calculator(userInput) {
   this.cleanedInput = userInput.replace(/[^0-9\+\-\*\/]/g, '');
-  console.log(this.cleanedInput);
+  // this does not handle negative numbers right now, need to update to properly handle
   this.expressionArray = this.cleanedInput.split(/([^\d])/);
-  console.log(this.expressionArray);
 }
-
-Calculator.prototype.resolveExpression = function(expression) {
-  var operatorPairs = [['*', '/'], ['+', '-']];
-  for (var i = 0; i < operatorPairs.length; i++) {
-    while (expression.indexOf(operatorPairs[i][0]) > -1 || expression.indexOf(operatorPairs[i][1]) > -1) {
-      var operator = this.assignOrderOperations(expression, operatorPairs[i]);
-      console.log(operator);
-      var inputs = this.splitExpression(expression, operator);
-      var resolvedVal = this.doMath(inputs.leftOperand, inputs.rightOperand, operator);
-      inputs.leftExp.push(resolvedVal);
-      console.log('NEW LEFT:', inputs.leftExp);
-      expression = inputs.leftExp.concat(inputs.rightExp);
-    }
-  }
-  console.log('FINAL OUTPUT', expression[0]);
-  return expression[0];
-}
-
-Calculator.prototype.splitExpression = function(expression, operator) {
-  var splitLocation = expression.indexOf(operator);
-  var leftExp = expression.slice(0, splitLocation);
-  var rightExp = expression.slice(splitLocation+1);
-  var leftOperand = +leftExp.pop();
-  var rightOperand = +rightExp.shift();
-  if (isNaN(leftOperand) || isNaN(rightOperand)) {
-    console.log('Bad Inputs');
-    return null;
-  }
-  console.log(leftExp, rightExp, leftOperand, rightOperand, operator);
-  return {
-    leftExp : leftExp,
-    rightExp : rightExp,
-    leftOperand : leftOperand,
-    rightOperand : rightOperand
-  }
-}
-
 
 Calculator.prototype.assignOrderOperations = function(expression, operatorPair) {
   var operator;
@@ -89,6 +60,24 @@ Calculator.prototype.assignOrderOperations = function(expression, operatorPair) 
     operator = operatorPair[1];
   }
   return operator;
+}
+
+Calculator.prototype.splitExpression = function(expression, operator) {
+  var splitLocation = expression.indexOf(operator);
+  var leftExp = expression.slice(0, splitLocation);
+  var rightExp = expression.slice(splitLocation+1);
+  var leftOperand = +leftExp.pop();
+  var rightOperand = +rightExp.shift();
+  if (isNaN(leftOperand) || isNaN(rightOperand)) {
+    console.log('Bad Inputs');
+    return null;
+  }
+  return {
+    leftExp : leftExp,
+    rightExp : rightExp,
+    leftOperand : leftOperand,
+    rightOperand : rightOperand
+  }
 }
 
 Calculator.prototype.doMath = function(num1, num2, operator) {
@@ -112,8 +101,22 @@ Calculator.prototype.doMath = function(num1, num2, operator) {
   }
 }
 
-var test = new Calculator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
-test.resolveExpression(test.expressionArray);
+Calculator.prototype.resolveExpression = function(expression) {
+  var operatorPairs = [['*', '/'], ['+', '-']];
+  for (var i = 0; i < operatorPairs.length; i++) {
+    while (expression.indexOf(operatorPairs[i][0]) > -1 || expression.indexOf(operatorPairs[i][1]) > -1) {
+      var operator = this.assignOrderOperations(expression, operatorPairs[i]);
+      var inputs = this.splitExpression(expression, operator);
+      var resolvedVal = this.doMath(inputs.leftOperand, inputs.rightOperand, operator);
+      inputs.leftExp.push(resolvedVal);
+      expression = inputs.leftExp.concat(inputs.rightExp);
+    }
+  }
+  return expression[0];
+}
+
+// var test = new Calculator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
+// test.resolveExpression(test.expressionArray);
 
 // console.log(test.doMath(2, 3, '*'));
 // console.log(test.doMath(2, 3, '/'));
@@ -134,3 +137,5 @@ test.resolveExpression(test.expressionArray);
 
 // var test5 = new Calculator('1+3/2*4');
 // test5.resolveExpression(test5.expressionArray);
+Evaluator('2 * 2 + 6 / 2 * 15 / 8 * 3 - 11');
+Evaluator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
