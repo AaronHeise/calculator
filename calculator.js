@@ -6,33 +6,6 @@
 // Must be extendable​ so that it accepts user-­defined operands
 // Complete it in your language of choice (JavaScript, PHP, Java…)
 
-/*
-Instantiate caculator class
-accept and cleans input of invalid chars
-split cleaned-up input into an array (don't worry about negatives to start)
-
-Add Methods to class:
-
-evaluateExpression(expression)
-  create Order of Operations tiers. Tier 1: multiplication & division. Tier 2: addition & subtraction
-  Iterate through the pairs
-    while either operator is still present in the expression, evaluate with priority from left to right
-    locate highest priority operator
-    split expression at operator location
-    take last element from left array and first element from right array
-    Feed these operands into doMath() with the appropriate operator
-
-assignOrderOperations(expression, operatorPair)
-  determine if only one of the operators is present, if so, select other one;
-  if both present, assign operator as first one in expression
-
-splitExpression(expression, operator)
-  given the highest priority operator, break apart the expression to be reduced w/ the operator
-
-doMath(num1, num2, operator)
-  actually carry out the mathematical operation
-*/
-
 // Evaluator provides an interface for users to simply input an expression and get the result back.
 function Evaluator(input) {
   var toEvaluate = new Calculator(input);
@@ -116,6 +89,8 @@ Calculator.prototype.resolveExpression = function(expression) {
   return expression[0];
 }
 
+/*** TEST SECTION ***/
+
 // var test = new Calculator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
 // test.resolveExpression(test.expressionArray);
 
@@ -142,3 +117,32 @@ Calculator.prototype.resolveExpression = function(expression) {
 // Final tests
 // Evaluator('2 * 2 + 6 / 2 * 15 / 8 * 3 - 11');
 // Evaluator('2*abc 2 + 6 / 2 * 15 / 8 * 3 - 11cv');
+
+/*** PLANNING NOTES ***/
+
+/*
+Instantiate caculator class
+accept and cleans input of invalid chars
+split cleaned-up input into an array (don't worry about negatives to start)
+
+Add Methods to class:
+
+evaluateExpression(expression)
+  create Order of Operations tiers. Tier 1: multiplication & division. Tier 2: addition & subtraction
+  Iterate through the pairs
+    while either operator is still present in the expression, evaluate with priority from left to right
+    locate highest priority operator
+    split expression at operator location
+    take last element from left array and first element from right array
+    Feed these operands into doMath() with the appropriate operator
+
+assignOrderOperations(expression, operatorPair)
+  determine if only one of the operators is present, if so, select other one;
+  if both present, assign operator as first one in expression
+
+splitExpression(expression, operator)
+  given the highest priority operator, break apart the expression to be reduced w/ the operator
+
+doMath(num1, num2, operator)
+  actually carry out the mathematical operation
+*/
